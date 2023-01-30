@@ -51,6 +51,7 @@ module ifu (
   input  logic [`XLEN-1:0] 	IEUAdrE,                                  // The branch/jump target address
   output logic [`XLEN-1:0] 	PCE,                                      // Execution stage instruction address
   output logic 				BPPredWrongE,                             // Prediction is wrong
+  output logic 				BPPredWrongM,                             // Prediction is wrong
   // Mem
   output logic              CommittedF,                               // I$ or bus memory operation started, delay interrupts
   input  logic [`XLEN-1:0] 	UnalignedPCNextF,                         // The next PCF, but not aligned to 2 bytes. 
@@ -60,6 +61,7 @@ module ifu (
   output logic [`XLEN-1:0] 	PCM,                                      // Memory stage instruction address
   // branch predictor
   output logic [3:0] 		InstrClassM,                              // The valid instruction class. 1-hot encoded as jalr, ret, jr (not ret), j, br
+  output logic              JumpOrTakenBranchM,
   output logic 				DirPredictionWrongM,                      // Prediction direction is wrong
   output logic 				BTBPredPCWrongM,                          // Prediction target wrong
   output logic 				RASPredPCWrongM,                          // RAS prediction is wrong
@@ -115,7 +117,7 @@ module ifu (
   logic [31:0] NextInstrD, NextInstrE;                                // Instruction into the next stage after possible stage flush
 
 
-  logic 					   CacheableF;                            // PMA indicates isntruction address is cacheable
+  logic 					   CacheableF;                            // PMA indicates instruction address is cacheable
   logic 					   SelNextSpillF;                         // In a spill, stall pipeline and gate local stallF
   logic 					   BusStall;                              // Bus interface busy with multicycle operation
   logic 					   ICacheStallF;                          // I$ busy with multicycle operation
@@ -134,7 +136,7 @@ module ifu (
   /////////////////////////////////////////////////////////////////////////////////////////////
 
   if(`C_SUPPORTED) begin : Spill
-    spill #(`ICACHE) spill(.clk, .reset, .StallD, .FlushD, .PCF, .PCPlus4F, .PCNextF, .InstrRawF,
+    spill #(`ICACHE_SUPPORTED) spill(.clk, .reset, .StallD, .FlushD, .PCF, .PCPlus4F, .PCNextF, .InstrRawF,
       .InstrDAPageFaultF, .IFUCacheBusStallD, .ITLBMissF, .PCNextFSpill, .PCFSpill, .SelNextSpillF, .PostSpillInstrRawF, .CompressedF);
   end else begin : NoSpill
     assign PCNextFSpill = PCNextF;
@@ -208,13 +210,13 @@ module ifu (
   end else begin
     assign IFURWF = 2'b10;
   end
-  if (`BUS) begin : bus
+  if (`BUS_SUPPORTED) begin : bus
     // **** must fix words per line vs beats per line as in lsu.
-    localparam integer   WORDSPERLINE = `ICACHE ? `ICACHE_LINELENINBITS/`XLEN : 1;
-    localparam integer   LOGBWPL = `ICACHE ? $clog2(WORDSPERLINE) : 1;
-    if(`ICACHE) begin : icache
-      localparam integer   LINELEN = `ICACHE ? `ICACHE_LINELENINBITS : `XLEN;
-      localparam integer   LLENPOVERAHBW = `LLEN / `AHBW; // Number of AHB beats in a LLEN word. AHBW cannot be larger than LLEN. (implementation limitation)
+    localparam   WORDSPERLINE = `ICACHE_SUPPORTED ? `ICACHE_LINELENINBITS/`XLEN : 1;
+    localparam   LOGBWPL = `ICACHE_SUPPORTED ? $clog2(WORDSPERLINE) : 1;
+    if(`ICACHE_SUPPORTED) begin : icache
+      localparam           LINELEN = `ICACHE_SUPPORTED ? `ICACHE_LINELENINBITS : `XLEN;
+      localparam           LLENPOVERAHBW = `LLEN / `AHBW; // Number of AHB beats in a LLEN word. AHBW cannot be larger than LLEN. (implementation limitation)
       logic [LINELEN-1:0]  FetchBuffer;
       logic [`PA_BITS-1:0] ICacheBusAdr;
       logic                ICacheBusAck;
@@ -322,12 +324,12 @@ module ifu (
   ////////////////////////////////////////////////////////////////////////////////////////////////
   // Branch and Jump Predictor
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  if (`BPRED_ENABLED) begin : bpred
+  if (`BPRED_SUPPORTED) begin : bpred
     bpred bpred(.clk, .reset,
                 .StallF, .StallD, .StallE, .StallM, .StallW,
                 .FlushD, .FlushE, .FlushM, .FlushW,
                 .InstrD, .PCNextF, .PCPlus2or4F, .PCNext1F, .PCE, .PCM, .PCSrcE, .IEUAdrE, .PCF, .NextValidPCE,
-                .PCD, .PCLinkE, .InstrClassM, .BPPredWrongE,
+                .PCD, .PCLinkE, .InstrClassM, .BPPredWrongE, .PostSpillInstrRawF, .JumpOrTakenBranchM, .BPPredWrongM,
                 .DirPredictionWrongM, .BTBPredPCWrongM, .RASPredPCWrongM, .PredictionInstrClassWrongM);
 
   end else begin : bpred
