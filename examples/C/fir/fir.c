@@ -5,19 +5,7 @@
 #include <stdio.h>  // supports printf
 #include <math.h>   // supports fabs
 #include "util.h"   // supports verify
-
-void fir(int N, int M, double X[], double c[], double Y[]) {
-  int i, n;
-  double sum; 
-
-  for (n=0; n<N; n++) {
-      sum = 0;
-      for (i=0; i<M; i++) {
-          sum += c[i]*X[n-i+(M-1)];
-      }
-      Y[n] = sum;
-  }
-}
+extern int fir(int N, int M, double X[], double c[], double Y[]);
 
 int main(void) {
     double X[20] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
