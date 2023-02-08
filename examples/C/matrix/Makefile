@@ -1,4 +1,4 @@
-TARGET = fir
+TARGET = multiply
 
 $(TARGET).objdump: $(TARGET)
 	riscv64-unknown-elf-objdump -S -D $(TARGET) > $(TARGET).objdump
@@ -9,7 +9,7 @@ $(TARGET): $(TARGET).c Makefile
 	  -march=rv64gc -mabi=lp64d -mcmodel=medany \
 	  -nostdlib -static -lm -fno-tree-loop-distribute-patterns \
 	  -T../common/test.ld -I../common \
-	  $(TARGET).c ../common/crt.S ../common/syscalls.c  fir.S
+	  $(TARGET).c ../common/crt.S ../common/syscalls.c
 # Compiler flags:
 #  -o $(TARGET) defines the name of the output file
 #  -g generates debugging symbols for gdb

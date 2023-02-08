@@ -1,6 +1,8 @@
-# sum.s
+# textbookFIR.s
 # sywu@hmc.edu 4 September 2023
-# Add up numbers from 1 to N.
+# An M-tap Finite Impulse Response filter computes an N-element
+# output sequence:
+# Y[n] = \sum_(t=0)^(M-1){c[i]X[n-i+(M-1)]}
 
 # i in s0, n in s1, sum in ft0,
 # N in a0, M in a1, X in a2, c in a3, Y in a4

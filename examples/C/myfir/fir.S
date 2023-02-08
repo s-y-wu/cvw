@@ -30,14 +30,14 @@ fir:
     add t3, a3, t3      # t3 is &c[M-1]
 outer_start:
     fmv.d.x ft0, zero   # sum = 0
-    add t4, a3, zero    # t4 is &c[0]
+    add t4, a3, zero    # t4 reset to &c[0]
     add t5, t2, zero    # t5 reset to &X[n-0+M-1]
 inner:
     fld ft1, 0(t4)              # ft1 is c[i]
-    addi t4, t4, 8              # i++ in c[i]
     fld ft2, 0(t5)              # X[n-i+M-1]
+    fmadd.d ft0, ft1, ft2, ft0  # sum += c[i] * X[n-i+M-1]  
+    addi t4, t4, 8              # i++ in c[i]
     addi t5, t5, -8             # i-- in X[n-i+M-1]
-    fmadd.d ft0, ft1, ft2, ft0  # sum += c[i] * X[n-i+M-1]   
     ble t4, t3, inner           # loop if i < M via c[i]
 outer_end:
     fsd ft0, 0(t0)              # Y[n] = sum
