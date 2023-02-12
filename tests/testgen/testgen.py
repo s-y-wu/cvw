@@ -19,36 +19,36 @@ from random import getrandbits
 # functions
 ##################################
 
-def twoscomp(a, xlen):
-  amsb = a >> (xlen-1)
-  alsbs = ((1 << (xlen-1)) - 1) & a
+def twoscomp(a):
+  amsb = a >> (XLEN-1)
+  alsbs = ((1 << (XLEN-1)) - 1) & a
   if (amsb):
-      asigned = a - (1<<xlen)
+      asigned = a - (1<<XLEN)
   else:
       asigned = a
   #print("a: " + str(a) + " amsb: "+str(amsb)+ " alsbs: " + str(alsbs) + " asigned: "+str(asigned))
   return asigned
 
-def computeExpected(a, b, test, xlen):
-  asigned = twoscomp(a, xlen)
-  bsigned = twoscomp(b, xlen)
+def computeExpected(a, b):
+  asigned = twoscomp(a)
+  bsigned = twoscomp(b)
 
-  if (test == "ADD"):
+  if (INSTRUCTION == "ADD" or INSTRUCTION == "ADDI"):
     return a + b
-  elif (test == "SUB"):
+  elif (INSTRUCTION == "SUB"):
     return a - b
-  elif (test == "SLT"):
+  elif (INSTRUCTION == "SLT"):
     return asigned < bsigned
-  elif (test == "SLTU"):
+  elif (INSTRUCTION == "SLTU"):
     return a < b
-  elif (test == "XOR"):
+  elif (INSTRUCTION == "XOR"):
     return a ^ b
-  elif (test == "OR"):
+  elif (INSTRUCTION == "OR"):
     return a | b
-  elif (test == "AND"):
+  elif (INSTRUCTION == "AND"):
     return a & b
   else:
-    die("bad test name ", test)
+    die("bad test name ", INSTRUCTION)
   #  exit(1)
 
 def randRegs():
@@ -60,94 +60,123 @@ def randRegs():
   else:
       return reg1, reg2, reg3
 
-def writeVector(a, b, storecmd, xlen):
-  global testnum
-  expected = computeExpected(a, b, test, xlen)
-  expected = expected % 2**xlen # drop carry if necessary
+def cleanExpectation(expected):
+  expected = expected % 2**XLEN # drop carry if necessary
   if (expected < 0): # take twos complement
-    expected = 2**xlen + expected
+    expected = 2**XLEN + expected
+  return expected
+
+def writeVector(a, b):
+  global TEST_COUNTER
+  expected = computeExpected(a, b)
+  expected = cleanExpectation(expected)
   reg1, reg2, reg3 = randRegs()
-  lines = "\n# Testcase " + str(testnum) + ":  rs1:x" + str(reg1) + "(" + formatstr.format(a)
+  lines = writeRTestcase(a, b, expected, reg1, reg2, reg3)
+  F.write(lines)
+  TEST_COUNTER = TEST_COUNTER+1
+
+def getWritingParams():
+  if (XLEN == 32):
+    storecmd = "sw"
+    wordsize = 4
+  else:
+    storecmd = "sd"
+    wordsize = 8
+    formatstrlen = str(int(XLEN/4))
+  formatstr = "0x{:0" + formatstrlen + "x}" # format as XLEN-bit hexadecimal number
+  formatrefstr = "{:08x}" # format as XLEN-bit hexadecimal number with no leading 0x
+  return storecmd, wordsize, formatstr
+  
+def writeRTestcase(a, b, expected, reg1, reg2, reg3):
+  storecmd, wordsize, formatstr = getWritingParams()
+  lines = "\n# Testcase " + str(TEST_COUNTER) + ":  rs1:x" + str(reg1) + "(" + formatstr.format(a)
   lines = lines + "), rs2:x" + str(reg2) + "(" +formatstr.format(b) 
   lines = lines + "), result rd:x" + str(reg3) + "(" + formatstr.format(expected) +")\n"
   lines = lines + "li x" + str(reg1) + ", MASK_XLEN(" + formatstr.format(a) + ")\n"
   lines = lines + "li x" + str(reg2) + ", MASK_XLEN(" + formatstr.format(b) + ")\n"
-  lines = lines + test + " x" + str(reg3) + ", x" + str(reg1) + ", x" + str(reg2) + "\n"
-  lines = lines + storecmd + " x" + str(reg3) + ", " + str(wordsize*testnum) + "(x6)\n"
-#  lines = lines + "RVTEST_IO_ASSERT_GPR_EQ(x7, " + str(reg3) +", "+formatstr.format(expected)+")\n"
-  f.write(lines)
-  testnum = testnum+1
+  lines = lines + INSTRUCTION + " x" + str(reg3) + ", x" + str(reg1) + ", x" + str(reg2) + "\n"
+  lines = lines + storecmd + " x" + str(reg3) + ", " + str(wordsize*TEST_COUNTER) + "(x6)\n"
+  # lines = lines + "RVTEST_IO_ASSERT_GPR_EQ(x7, " + str(reg3) +", "+formatstr.format(expected)+")\n"
+  return lines
+
+def writeHeader():
+    # print custom header part
+    line = "///////////////////////////////////////////\n"
+    F.write(line)
+    nameline="// "+ FNAME + "\n// " + AUTHOR + "\n"
+    F.write(nameline)
+    line ="// Created " + str(datetime.now()) 
+    F.write(line)
+
+    # insert generic header
+    h = open("testgen_header.S", "r")
+    for line in h:  
+      F.write(line)
+
+def writeFooter():
+    line = "\n.EQU NUMTESTS," + str(TEST_COUNTER) + "\n\n"
+    F.write(line)
+    h = open("testgen_footer.S", "r")
+    for line in h:  
+      F.write(line)
+    nameline="// "+FNAME+ "\n// " + AUTHOR + "\n"
+    F.write(nameline)
+    # Finish
+    #    lines = ".fill " + str(TEST_COUNTER) + ", " + str(wordsize) + ", -1\n"
+    #    lines = lines + "\nRV_COMPLIANCE_DATA_END\n" 
+
+def writeDirectedVectors():
+  # corners = [0, 1, 2, 0xFF, 0x624B3E976C52DD14 % 2**XLEN, 2**(XLEN-1)-2, 2**(XLEN-1)-1, 
+  #            2**(XLEN-1), 2**(XLEN-1)+1, 0xC365DDEB9173AB42 % 2**XLEN, 2**(XLEN)-2, 2**(XLEN)-1]
+  corners = [0, 1, 2**(XLEN)-1]
+  for a in corners:
+      for b in corners:
+        writeVector(a, b)
+
+def writeRandomVectors():
+  for _ in range(0, NUMRAND):
+      a = getrandbits(XLEN)
+      b = getrandbits(XLEN)
+      writeVector(a, b)
+
+def getFileName():
+  instructiontype = INSTRUCTIONS[INSTRUCTION]
+  pathname = "../wally-riscv-arch-test/riscv-test-suite/rv"
+  pathname += str(XLEN) + "i_m/" + str(instructiontype) + "/"
+  basename = "WALLY-" + INSTRUCTION 
+  return pathname + "src/" + basename + ".S"
 
 ##################################
 # main body
 ##################################
 
 # change these to suite your tests
-tests = ["ADD", "SUB", "SLT", "SLTU", "XOR"]
-author = "David_Harris@hmc.edu & Katherine Parry"
-xlens = [32, 64]
-numrand = 3
+# key:value is test name:instruction type
+INSTRUCTIONS = {
+  "ADD":"R",
+  "ADDI":"I",
+  "AND":"R",
+  "OR":"R",
+  "SUB":"R",
+  "SLT":"R",
+  "SLTU":"R",
+  "XOR":"R",
+}
+AUTHOR = "Sean Wu (sywu@hmc.edu)"
+XLENS = [64] # orig [32, 64]
+NUMRAND = 3
 
 # setup
 seed(0) # make tests reproducible
 
 # generate files for each test
-for xlen in xlens:
-  formatstrlen = str(int(xlen/4))
-  formatstr = "0x{:0" + formatstrlen + "x}" # format as xlen-bit hexadecimal number
-  formatrefstr = "{:08x}" # format as xlen-bit hexadecimal number with no leading 0x
-  if (xlen == 32):
-    storecmd = "sw"
-    wordsize = 4
-  else:
-    storecmd = "sd"
-    wordsize = 8
-  for test in tests:
-#    corners = [0, 1, 2, 0xFF, 0x624B3E976C52DD14 % 2**xlen, 2**(xlen-1)-2, 2**(xlen-1)-1, 
-#            2**(xlen-1), 2**(xlen-1)+1, 0xC365DDEB9173AB42 % 2**xlen, 2**(xlen)-2, 2**(xlen)-1]
-    corners = [0, 1, 2**(xlen)-1]
-    pathname = "../wally-riscv-arch-test/riscv-test-suite/rv" + str(xlen) + "i_m/I/"
-    basename = "WALLY-" + test 
-    fname = pathname + "src/" + basename + ".S"
-    testnum = 0
-
-    # print custom header part
-    f = open(fname, "w")
-    line = "///////////////////////////////////////////\n"
-    f.write(line)
-    lines="// "+fname+ "\n// " + author + "\n"
-    f.write(lines)
-    line ="// Created " + str(datetime.now()) 
-    f.write(line)
-
-    # insert generic header
-    h = open("testgen_header.S", "r")
-    for line in h:  
-      f.write(line)
-
-    # print directed and random test vectors
-    for a in corners:
-      for b in corners:
-        writeVector(a, b, storecmd, xlen)
-    for i in range(0,numrand):
-      a = getrandbits(xlen)
-      b = getrandbits(xlen)
-      writeVector(a, b, storecmd, xlen)
-
-
-    # print footer
-    line = "\n.EQU NUMTESTS," + str(testnum) + "\n\n"
-    f.write(line)
-    h = open("testgen_footer.S", "r")
-    for line in h:  
-      f.write(line)
-
-    # Finish
-#    lines = ".fill " + str(testnum) + ", " + str(wordsize) + ", -1\n"
-#    lines = lines + "\nRV_COMPLIANCE_DATA_END\n" 
-    f.write(lines)
-    f.close()
-
-
-
-
+for XLEN in XLENS:
+  for INSTRUCTION in INSTRUCTIONS.keys():
+    TEST_COUNTER = 0
+    FNAME = getFileName()
+    F = open(FNAME, "w")
+    writeHeader()
+    writeDirectedVectors()
+    writeRandomVectors()
+    writeFooter()
+    F.close()
