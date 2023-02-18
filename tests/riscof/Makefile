@@ -5,6 +5,8 @@ work = ./work
 arch_workdir = $(work)/riscv-arch-test
 wally_workdir = $(work)/wally-riscv-arch-test
 
+grep_target = "rv64i_m/I/src/"
+
 current_dir = $(shell pwd)
 #XLEN    ?= 64
 
@@ -45,9 +47,9 @@ wally32e:
 
 
 memfile: 
-	find $(work) -type f -name "*.elf" | grep "rv64i_m" | while read f; do riscv64-unknown-elf-elf2hex --bit-width 64 --input "$$f" --output "$$f.memfile"; done
-	find $(work) -type f -name "*.elf" | grep "rv32i_m" | while read f; do riscv64-unknown-elf-elf2hex --bit-width 32 --input "$$f" --output "$$f.memfile"; done
-	find $(work) -type f -name "*.elf.objdump" | while read f; do extractFunctionRadix.sh $$f; done
+	find $(work) -type f -name "*.elf" | grep $(grep_target) | while read f; do riscv64-unknown-elf-elf2hex --bit-width 64 --input "$$f" --output "$$f.memfile"; done
+#	find $(work) -type f -name "*.elf" | grep "rv32i_m" | while read f; do riscv64-unknown-elf-elf2hex --bit-width 32 --input "$$f" --output "$$f.memfile"; done
+	find $(work) -type f -name "*.elf.objdump" | grep $(grep_target) | while read f; do extractFunctionRadix.sh $$f; done
 
 clean:
 	rm -f config64.ini

@@ -1738,6 +1738,8 @@ string imperas32f[] = '{
  string wally64i[] = '{
     `WALLYTEST,
     "rv64i_m/I/src/WALLY-ADD.S",
+    "rv64i_m/I/src/WALLY-ADDI.S",
+    "rv64i_m/I/src/WALLY-ADDIW.S",
     "rv64i_m/I/src/WALLY-SLT.S",
     "rv64i_m/I/src/WALLY-SLTU.S",
     "rv64i_m/I/src/WALLY-SUB.S",

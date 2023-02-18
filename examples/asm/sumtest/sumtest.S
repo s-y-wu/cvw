@@ -34,7 +34,7 @@ N:
 
 .EQU XLEN,64
 begin_signature:
-    .fill 2*(XLEN/32),4,0xdeadbeef    # 
+    .fill 2*(XLEN/32),4,0xdeadbeef    #  4 elements, 4 bytes each (ret and mcycle)
 end_signature:
 
 # Initialize stack with room for 512 bytes

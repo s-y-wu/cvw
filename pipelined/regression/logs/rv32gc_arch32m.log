@@ -1,0 +1,668 @@
+Reading pref.tcl
+
+# 2022.4_2
+
+QuestaSim> do wally-pipelined-batch.do rv32gc arch32m
+# QuestaSim-64 vlog 2022.4_2 Compiler 2022.12 Dec  9 2022
+# Start time: 02:34:07 on Feb 03,2023
+# vlog -lint -work wkdir/work_rv32gc_arch32m "+incdir+../config/rv32gc" "+incdir+../config/shared" ../testbench/testbench.sv ../testbench/common/functionName.sv ../testbench/common/instrNameDecTB.sv ../testbench/common/instrTrackerTB.sv ../testbench/common/wallyTracer.sv ../src/cache/cache.sv ../src/cache/cacheLRU.sv ../src/cache/cachefsm.sv ../src/cache/cacheway.sv ../src/cache/subcachelineread.sv ../src/ebu/ahbcacheinterface.sv ../src/ebu/ahbinterface.sv ../src/ebu/buscachefsm.sv ../src/ebu/busfsm.sv ../src/ebu/controllerinputstage.sv ../src/ebu/ebu.sv ../src/ebu/ebuarbfsm.sv ../src/fpu/fclassify.sv ../src/fpu/fcmp.sv ../src/fpu/fctrl.sv ../src/fpu/fcvt.sv ../src/fpu/fhazard.sv ../src/fpu/fpu.sv ../src/fpu/fregfile.sv ../src/fpu/fsgninj.sv ../src/fpu/unpack.sv ../src/fpu/unpackinput.sv ../src/generic/adder.sv ../src/generic/aplusbeq0.sv ../src/generic/arrs.sv ../src/generic/binencoder.sv ../src/generic/clockgater.sv ../src/generic/counter.sv ../src/generic/csa.sv ../src/generic/decoder.sv ../src/generic/lzc.sv ../src/generic/mux.sv ../src/generic/neg.sv ../src/generic/onehotdecoder.sv ../src/generic/or_rows.sv ../src/generic/priorityonehot.sv ../src/generic/prioritythermometer.sv ../src/hazard/hazard.sv ../src/ieu/alu.sv ../src/ieu/comparator.sv ../src/ieu/controller.sv ../src/ieu/datapath.sv ../src/ieu/extend.sv ../src/ieu/forward.sv ../src/ieu/ieu.sv ../src/ieu/regfile.sv ../src/ieu/shifter.sv ../src/ifu/decompress.sv ../src/ifu/ifu.sv ../src/ifu/irom.sv ../src/ifu/spill.sv ../src/lsu/amoalu.sv ../src/lsu/atomic.sv ../src/lsu/dtim.sv ../src/lsu/endianswap.sv ../src/lsu/lrsc.sv ../src/lsu/lsu.sv ../src/lsu/subwordread.sv ../src/lsu/subwordwrite.sv ../src/lsu/swbytemask.sv ../src/mdu/intdivrestoring.sv ../src/mdu/intdivrestoringstep.sv ../src/mdu/mdu.sv ../src/mdu/mul.sv ../src/mmu/adrdec.sv ../src/mmu/adrdecs.sv ../src/mmu/hptw.sv ../src/mmu/mmu.sv ../src/mmu/pmachecker.sv ../src/mmu/pmpadrdec.sv ../src/mmu/pmpchecker.sv ../src/mmu/tlb.sv ../src/mmu/tlbcam.sv ../src/mmu/tlbcamline.sv ../src/mmu/tlbcontrol.sv ../src/mmu/tlblru.sv ../src/mmu/tlbmixer.sv ../src/mmu/tlbram.sv ../src/mmu/tlbramline.sv ../src/mmu/vm64check.sv ../src/privileged/csr.sv ../src/privileged/csrc.sv ../src/privileged/csri.sv ../src/privileged/csrm.sv ../src/privileged/csrs.sv ../src/privileged/csrsr.sv ../src/privileged/csru.sv ../src/privileged/privdec.sv ../src/privileged/privileged.sv ../src/privileged/privmode.sv ../src/privileged/privpiperegs.sv ../src/privileged/trap.sv ../src/uncore/ahbapbbridge.sv ../src/uncore/clint_apb.sv ../src/uncore/gpio_apb.sv ../src/uncore/plic_apb.sv ../src/uncore/ram_ahb.sv ../src/uncore/rom_ahb.sv ../src/uncore/uartPC16550D.sv ../src/uncore/uart_apb.sv ../src/uncore/uncore.sv ../src/wally/cvw.sv ../src/wally/wallypipelinedcore.sv ../src/wally/wallypipelinedsoc.sv ../src/fpu/fdivsqrt/fdivsqrt.sv ../src/fpu/fdivsqrt/fdivsqrtexpcalc.sv ../src/fpu/fdivsqrt/fdivsqrtfgen2.sv ../src/fpu/fdivsqrt/fdivsqrtfgen4.sv ../src/fpu/fdivsqrt/fdivsqrtfsm.sv ../src/fpu/fdivsqrt/fdivsqrtiter.sv ../src/fpu/fdivsqrt/fdivsqrtpostproc.sv ../src/fpu/fdivsqrt/fdivsqrtpreproc.sv ../src/fpu/fdivsqrt/fdivsqrtqsel2.sv ../src/fpu/fdivsqrt/fdivsqrtqsel4.sv ../src/fpu/fdivsqrt/fdivsqrtqsel4cmp.sv ../src/fpu/fdivsqrt/fdivsqrtstage2.sv ../src/fpu/fdivsqrt/fdivsqrtstage4.sv ../src/fpu/fdivsqrt/fdivsqrtuotfc2.sv ../src/fpu/fdivsqrt/fdivsqrtuotfc4.sv ../src/fpu/fma/fma.sv ../src/fpu/fma/fmaadd.sv ../src/fpu/fma/fmaalign.sv ../src/fpu/fma/fmaexpadd.sv ../src/fpu/fma/fmalza.sv ../src/fpu/fma/fmamult.sv ../src/fpu/fma/fmasign.sv ../src/fpu/postproc/cvtshiftcalc.sv ../src/fpu/postproc/divshiftcalc.sv ../src/fpu/postproc/flags.sv ../src/fpu/postproc/fmashiftcalc.sv ../src/fpu/postproc/negateintres.sv ../src/fpu/postproc/normshift.sv ../src/fpu/postproc/postprocess.sv ../src/fpu/postproc/resultsign.sv ../src/fpu/postproc/round.sv ../src/fpu/postproc/roundsign.sv ../src/fpu/postproc/shiftcorrection.sv ../src/fpu/postproc/specialcase.sv ../src/generic/flop/flop.sv ../src/generic/flop/flopen.sv ../src/generic/flop/flopenl.sv ../src/generic/flop/flopenr.sv ../src/generic/flop/flopenrc.sv ../src/generic/flop/flopens.sv ../src/generic/flop/flopr.sv ../src/generic/flop/floprc.sv ../src/generic/flop/synchronizer.sv ../src/generic/mem/ram1p1rwbe.sv ../src/generic/mem/ram1p1rwbe_64x128.sv ../src/generic/mem/ram1p1rwbe_64x44.sv ../src/generic/mem/ram2p1r1wbe.sv ../src/generic/mem/ram2p1r1wbe_1024x69.sv ../src/generic/mem/rom1p1r.sv ../src/generic/mem/rom1p1r_128x32.sv ../src/ifu/bpred/RASPredictor.sv ../src/ifu/bpred/bpred.sv ../src/ifu/bpred/btb.sv ../src/ifu/bpred/foldedgshare.sv ../src/ifu/bpred/globalhistory.sv ../src/ifu/bpred/gshare.sv ../src/ifu/bpred/localHistoryPredictor.sv ../src/ifu/bpred/optgshare.sv ../src/ifu/bpred/satCounter2.sv ../src/ifu/bpred/speculativeglobalhistory.sv ../src/ifu/bpred/speculativegshare.sv ../src/ifu/bpred/twoBitPredictor.sv -suppress 2583 -suppress 7063,2596 
+# -- Compiling package testbench_sv_unit
+# -- Compiling module testbench
+# -- Compiling module riscvassertions
+# -- Compiling module DCacheFlushFSM
+# -- Compiling module copyShadow
+# -- Compiling module FunctionName
+# -- Compiling module instrNameDecTB
+# -- Compiling module instrTrackerTB
+# -- Compiling module wallyTracer
+# ** Warning: ../testbench/common/wallyTracer.sv(41): (vlog-2623) Undefined variable: clk.
+# ** Warning: ../testbench/common/wallyTracer.sv(43): (vlog-2623) Undefined variable: InstrValidD.
+# ** Warning: ../testbench/common/wallyTracer.sv(44): (vlog-2623) Undefined variable: InstrValidE.
+# ** Warning: ../testbench/common/wallyTracer.sv(53): (vlog-2623) Undefined variable: StallF.
+# ** Warning: ../testbench/common/wallyTracer.sv(54): (vlog-2623) Undefined variable: StallD.
+# ** Warning: ../testbench/common/wallyTracer.sv(65): (vlog-2623) Undefined variable: STATUS_SXL.
+# ** Warning: ../testbench/common/wallyTracer.sv(66): (vlog-2623) Undefined variable: STATUS_UXL.
+# -- Compiling module cache
+# -- Compiling module cacheLRU
+# -- Compiling module cachefsm
+# -- Compiling module cacheway
+# -- Compiling module subcachelineread
+# -- Compiling module ahbcacheinterface
+# -- Compiling module ahbinterface
+# -- Compiling module buscachefsm
+# -- Compiling module busfsm
+# -- Compiling module controllerinputstage
+# -- Compiling module ebu
+# -- Compiling module ebufsmarb
+# -- Compiling module fclassify
+# -- Compiling module fcmp
+# -- Compiling module fctrl
+# -- Compiling module fcvt
+# -- Compiling module fhazard
+# -- Compiling module fpu
+# -- Compiling module fregfile
+# -- Compiling module fsgninj
+# -- Compiling module unpack
+# -- Compiling module unpackinput
+# -- Compiling module adder
+# -- Compiling module aplusbeq0
+# -- Compiling module arrs
+# -- Compiling module binencoder
+# -- Compiling module clockgater
+# -- Compiling module counter
+# -- Compiling module csa
+# -- Compiling module decoder
+# -- Compiling module lzc
+# -- Compiling module mux2
+# -- Compiling module mux3
+# -- Compiling module mux4
+# -- Compiling module mux5
+# -- Compiling module mux6
+# -- Compiling module neg
+# -- Compiling module onehotdecoder
+# -- Compiling module or_rows
+# -- Compiling module priorityonehot
+# -- Compiling module prioritythermometer
+# -- Compiling module hazard
+# -- Compiling module alu
+# -- Compiling module comparator
+# -- Compiling module controller
+# -- Compiling module datapath
+# -- Compiling module extend
+# -- Compiling module forward
+# -- Compiling module ieu
+# -- Compiling module regfile
+# -- Compiling module shifter
+# -- Compiling module decompress
+# -- Compiling module ifu
+# -- Compiling module irom
+# -- Compiling module spill
+# -- Compiling module amoalu
+# -- Compiling module atomic
+# -- Compiling module dtim
+# -- Compiling module endianswap
+# -- Compiling module lrsc
+# -- Compiling module lsu
+# -- Compiling module subwordread
+# -- Compiling module subwordwrite
+# -- Compiling module swbytemask
+# -- Compiling module intdivrestoring
+# -- Compiling module intdivrestoringstep
+# -- Compiling module mdu
+# -- Compiling module mul
+# -- Compiling module adrdec
+# -- Compiling module adrdecs
+# -- Compiling module hptw
+# -- Compiling module mmu
+# -- Compiling module pmachecker
+# -- Compiling module pmpadrdec
+# -- Compiling module pmpchecker
+# -- Compiling module tlb
+# -- Compiling module tlbcam
+# -- Compiling module tlbcamline
+# -- Compiling module tlbcontrol
+# -- Compiling module tlblru
+# -- Compiling module tlbmixer
+# -- Compiling module tlbram
+# -- Compiling module tlbramline
+# -- Compiling module vm64check
+# -- Compiling module csr
+# -- Compiling module csrc
+# -- Compiling module csri
+# -- Compiling module csrm
+# -- Compiling module csrs
+# -- Compiling module csrsr
+# -- Compiling module csru
+# -- Compiling module privdec
+# -- Compiling module privileged
+# -- Compiling module privmode
+# -- Compiling module privpiperegs
+# -- Compiling module trap
+# -- Compiling module ahbapbbridge
+# -- Compiling module clint_apb
+# -- Compiling module timeregsync
+# -- Compiling module timereg
+# -- Compiling module binarytogray
+# -- Compiling module graytobinary
+# -- Compiling module gpio_apb
+# -- Compiling module plic_apb
+# -- Compiling module ram_ahb
+# -- Compiling module rom_ahb
+# -- Compiling module uartPC16550D
+# -- Compiling module uart_apb
+# -- Compiling module uncore
+# -- Compiling package cvw
+# -- Compiling module wallypipelinedcore
+# -- Compiling module wallypipelinedsoc
+# -- Compiling module fdivsqrt
+# -- Compiling module fdivsqrtexpcalc
+# -- Compiling module fdivsqrtfgen2
+# -- Compiling module fdivsqrtfgen4
+# -- Compiling module fdivsqrtfsm
+# -- Compiling module fdivsqrtiter
+# -- Compiling module fdivsqrtpostproc
+# -- Compiling module fdivsqrtpreproc
+# -- Compiling module fdivsqrtqsel2
+# -- Compiling module fdivsqrtqsel4
+# -- Compiling module fdivsqrtqsel4cmp
+# -- Compiling module fdivsqrtstage2
+# -- Compiling module fdivsqrtstage4
+# -- Compiling module fdivsqrtuotfc2
+# -- Compiling module fdivsqrtuotfc4
+# -- Compiling module fma
+# -- Compiling module fmaadd
+# -- Compiling module fmaalign
+# -- Compiling module fmaexpadd
+# -- Compiling module fmalza
+# -- Compiling module fmamult
+# -- Compiling module fmasign
+# -- Compiling module cvtshiftcalc
+# -- Compiling module divshiftcalc
+# -- Compiling module flags
+# -- Compiling module fmashiftcalc
+# -- Compiling module negateintres
+# -- Compiling module normshift
+# -- Compiling module postprocess
+# -- Compiling module resultsign
+# -- Compiling module round
+# -- Compiling module roundsign
+# -- Compiling module shiftcorrection
+# -- Compiling module specialcase
+# -- Compiling module flop
+# -- Compiling module flopen
+# -- Compiling module flopenl
+# -- Compiling module flopenr
+# -- Compiling module flopenrc
+# -- Compiling module flopens
+# -- Compiling module flopr
+# -- Compiling module floprc
+# -- Compiling module synchronizer
+# -- Compiling module ram1p1rwbe
+# -- Compiling module ram1p1rwbe_64x128
+# -- Compiling module ram1p1rwbe_64x44
+# -- Compiling module ram2p1r1wbe
+# -- Compiling module ram2p1r1wbe_1024x69
+# -- Compiling module rom1p1r
+# -- Compiling module rom1p1r_128x32
+# -- Compiling module RASPredictor
+# -- Compiling module bpred
+# -- Compiling module btb
+# -- Compiling module foldedgshare
+# -- Compiling module globalhistory
+# -- Compiling module gshare
+# -- Compiling module localHistoryPredictor
+# -- Compiling module optgshare
+# -- Compiling module satCounter2
+# -- Compiling module speculativeglobalhistory
+# -- Compiling module speculativegshare
+# -- Compiling module twoBitPredictor
+# 
+# Top level modules:
+# 	testbench
+# 	wallyTracer
+# 	arrs
+# 	clockgater
+# 	counter
+# 	mux6
+# 	prioritythermometer
+# 	timereg
+# 	fdivsqrtqsel4
+# 	ram1p1rwbe_64x128
+# 	ram2p1r1wbe_1024x69
+# 	rom1p1r_128x32
+# 	foldedgshare
+# 	localHistoryPredictor
+# 	optgshare
+# End time: 02:34:09 on Feb 03,2023, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 7, Suppressed Warnings: 11
+# QuestaSim-64 vopt 2022.4_2 Compiler 2022.12 Dec  9 2022
+# Start time: 02:34:09 on Feb 03,2023
+# vopt wkdir/work_rv32gc_arch32m.testbench -work wkdir/work_rv32gc_arch32m -G TEST=arch32m -o testbenchopt 
+# 
+# Top level modules:
+# 	testbench
+# 
+# Analyzing design...
+# -- Loading module testbench
+# -- Loading module flopenr
+# -- Loading module riscvassertions
+# -- Loading module wallypipelinedsoc
+# -- Loading module synchronizer
+# -- Loading module wallypipelinedcore
+# -- Loading module ifu
+# -- Loading module flopenl
+# -- Loading module flopenrc
+# -- Loading module mux2
+# -- Loading module ieu
+# -- Loading module controller
+# -- Loading module datapath
+# -- Loading module regfile
+# -- Loading module extend
+# -- Loading module mux3
+# -- Loading module comparator
+# -- Loading module alu
+# -- Loading module shifter
+# -- Loading module mux5
+# -- Loading module forward
+# -- Loading module lsu
+# -- Loading module subwordread
+# -- Loading module subwordwrite
+# -- Loading module swbytemask
+# -- Loading module flopen
+# -- Loading module hazard
+# -- Loading module instrTrackerTB
+# -- Loading module instrNameDecTB
+# -- Loading module DCacheFlushFSM
+# -- Loading module flop
+# -- Loading module spill
+# -- Loading module flopr
+# -- Loading module mmu
+# -- Loading module pmachecker
+# -- Loading module adrdecs
+# -- Loading module adrdec
+# -- Loading module pmpchecker
+# -- Loading module cache
+# -- Loading module or_rows
+# -- Loading module subcachelineread
+# -- Loading module onehotdecoder
+# -- Loading module cachefsm
+# -- Loading module ahbcacheinterface
+# -- Loading module buscachefsm
+# -- Loading module bpred
+# -- Loading module btb
+# -- Loading module ram2p1r1wbe
+# -- Loading module RASPredictor
+# -- Loading module decompress
+# -- Loading module hptw
+# -- Loading module atomic
+# -- Loading module amoalu
+# -- Loading module lrsc
+# -- Loading module endianswap
+# -- Loading module ebu
+# -- Loading module controllerinputstage
+# -- Loading module ebufsmarb
+# -- Loading module privileged
+# -- Loading module privmode
+# -- Loading module privdec
+# -- Loading module csr
+# -- Loading module csri
+# -- Loading module csrsr
+# -- Loading module csrm
+# -- Loading module privpiperegs
+# -- Loading module trap
+# -- Loading module mdu
+# -- Loading module mul
+# -- Loading module fpu
+# -- Loading module fctrl
+# -- Loading module fregfile
+# -- Loading module fhazard
+# -- Loading module unpack
+# -- Loading module unpackinput
+# -- Loading module fma
+# -- Loading module fmaexpadd
+# -- Loading module fmamult
+# -- Loading module fmasign
+# -- Loading module fmaalign
+# -- Loading module fmaadd
+# -- Loading module fmalza
+# -- Loading module lzc
+# -- Loading module fdivsqrt
+# -- Loading module fdivsqrtpreproc
+# -- Loading module fdivsqrtexpcalc
+# -- Loading module fdivsqrtfsm
+# -- Loading module fdivsqrtiter
+# -- Loading module fdivsqrtpostproc
+# -- Loading module aplusbeq0
+# -- Loading module fcmp
+# -- Loading module fsgninj
+# -- Loading module fclassify
+# -- Loading module fcvt
+# -- Loading module postprocess
+# -- Loading module cvtshiftcalc
+# -- Loading module fmashiftcalc
+# -- Loading module divshiftcalc
+# -- Loading module normshift
+# -- Loading module shiftcorrection
+# -- Loading module roundsign
+# -- Loading module round
+# -- Loading module resultsign
+# -- Loading module flags
+# -- Loading module negateintres
+# -- Loading module specialcase
+# -- Loading module uncore
+# -- Loading module ahbapbbridge
+# -- Loading module tlb
+# -- Loading module tlbcontrol
+# -- Loading module vm64check
+# -- Loading module tlblru
+# -- Loading module priorityonehot
+# -- Loading module tlbcam
+# -- Loading module tlbram
+# -- Loading module tlbmixer
+# -- Loading module pmpadrdec
+# -- Loading module cacheway
+# -- Loading module ram1p1rwbe
+# -- Loading module cacheLRU
+# -- Loading module binencoder
+# -- Loading module decoder
+# -- Loading module speculativegshare
+# -- Loading module satCounter2
+# -- Loading module floprc
+# -- Loading module csrs
+# -- Loading module flopens
+# -- Loading module csru
+# -- Loading module csrc
+# -- Loading module fdivsqrtstage4
+# -- Loading module fdivsqrtqsel4cmp
+# -- Loading module fdivsqrtfgen4
+# -- Loading module csa
+# -- Loading module fdivsqrtuotfc4
+# -- Loading module ram_ahb
+# -- Loading module rom_ahb
+# -- Loading module rom1p1r
+# -- Loading module clint_apb
+# -- Loading module plic_apb
+# -- Loading module gpio_apb
+# -- Loading module uart_apb
+# -- Loading module uartPC16550D
+# -- Loading module copyShadow
+# -- Loading module tlbcamline
+# -- Loading module tlbramline
+# Optimizing 237 design-units (inlining 1071/1440 module instances):
+# -- Optimizing package testbench_sv_unit(fast)
+# -- Inlining module flopenr(fast)
+# -- Inlining module riscvassertions(fast)
+# -- Inlining module synchronizer(fast)
+# -- Inlining module mux2(fast)
+# -- Inlining module flopenr(fast__1)
+# -- Inlining module spill(fast)
+# -- Inlining module flopr(fast)
+# -- Inlining module vm64check(fast)
+# -- Inlining module tlbcontrol(fast)
+# -- Inlining module priorityonehot(fast)
+# -- Inlining module flopenrc(fast)
+# -- Inlining module tlblru(fast)
+# -- Inlining module or_rows(fast)
+# -- Inlining module tlbcam(fast)
+# -- Inlining module tlbramline(fast)
+# -- Inlining module or_rows(fast__1)
+# -- Inlining module tlbram(fast)
+# -- Inlining module mux2(fast__1)
+# -- Inlining module mux2(fast__2)
+# -- Inlining module tlbmixer(fast)
+# -- Inlining module tlb(fast)
+# -- Inlining module adrdec(fast)
+# -- Inlining module adrdecs(fast)
+# -- Inlining module pmachecker(fast)
+# -- Inlining module priorityonehot(fast__1)
+# -- Inlining module pmpchecker(fast)
+# -- Inlining module mmu(fast)
+# -- Inlining module mux3(fast)
+# -- Inlining module mux2(fast__4)
+# -- Inlining module binencoder(fast)
+# -- Inlining module mux2(fast__3)
+# -- Inlining module priorityonehot(fast__2)
+# -- Inlining module mux2(fast__5)
+# -- Inlining module decoder(fast)
+# -- Inlining module cacheLRU(fast)
+# -- Inlining module or_rows(fast__2)
+# -- Inlining module or_rows(fast__3)
+# -- Inlining module mux2(fast__6)
+# -- Inlining module subcachelineread(fast)
+# -- Inlining module mux3(fast__1)
+# -- Inlining module onehotdecoder(fast)
+# -- Inlining module mux2(fast__7)
+# -- Inlining module flopenr(fast__5)
+# -- Inlining module mux2(fast__8)
+# -- Inlining module flopenl(fast)
+# -- Inlining module flop(fast)
+# -- Inlining module cachefsm(fast)
+# -- Inlining module cache(fast)
+# -- Inlining module flopen(fast)
+# -- Inlining module mux2(fast__9)
+# -- Inlining module swbytemask(fast)
+# -- Inlining module flopen(fast__1)
+# -- Inlining module flopenr(fast__6)
+# -- Inlining module buscachefsm(fast)
+# -- Inlining module ahbcacheinterface(fast)
+# -- Inlining module mux3(fast__2)
+# -- Inlining module flopenl(fast__1)
+# -- Inlining module ram2p1r1wbe(fast)
+# -- Inlining module flopenr(fast__3)
+# -- Inlining module flopenr(fast__2)
+# -- Inlining module satCounter2(fast)
+# -- Inlining module mux3(fast__3)
+# -- Inlining module flopenr(fast__7)
+# -- Inlining module mux2(fast__10)
+# -- Inlining module speculativegshare(fast)
+# -- Inlining module flopenr(fast__8)
+# -- Inlining module ram2p1r1wbe(fast__1)
+# -- Inlining module flopenrc(fast__1)
+# -- Inlining module btb(fast)
+# -- Inlining module RASPredictor(fast)
+# -- Inlining module flopenrc(fast__2)
+# -- Inlining module flopenrc(fast__3)
+# -- Inlining module bpred(fast)
+# -- Inlining module decompress(fast)
+# -- Inlining module ifu(fast)
+# -- Inlining module flopenrc(fast__4)
+# -- Inlining module flopenrc(fast__5)
+# -- Inlining module flopenrc(fast__6)
+# -- Inlining module controller(fast)
+# -- Inlining module regfile(fast)
+# -- Inlining module extend(fast)
+# -- Inlining module comparator(fast)
+# -- Inlining module shifter(fast)
+# -- Inlining module alu(fast)
+# -- Inlining module mux5(fast)
+# -- Inlining module datapath(fast)
+# -- Inlining module forward(fast)
+# -- Inlining module ieu(fast)
+# -- Inlining module flopr(fast__1)
+# -- Inlining module flopenl(fast__2)
+# -- Inlining module mux2(fast__11)
+# -- Inlining module hptw(fast)
+# -- Inlining module tlbcontrol(fast__1)
+# -- Inlining module tlb(fast__1)
+# -- Inlining module mmu(fast__1)
+# -- Inlining module subcachelineread(fast__1)
+# -- Inlining module onehotdecoder(fast__1)
+# -- Inlining module cache(fast__1)
+# -- Inlining module mux3(fast__4)
+# -- Inlining module amoalu(fast)
+# -- Inlining module lrsc(fast)
+# -- Inlining module atomic(fast)
+# -- Inlining module mux2(fast__12)
+# -- Inlining module subwordread(fast)
+# -- Inlining module subwordwrite(fast)
+# -- Inlining module swbytemask(fast__1)
+# -- Inlining module flopen(fast__2)
+# -- Inlining module endianswap(fast)
+# -- Inlining module lsu(fast)
+# -- Inlining module flopenr(fast__9)
+# -- Inlining module mux2(fast__13)
+# -- Inlining module controllerinputstage(fast)
+# -- Inlining module controllerinputstage(fast__1)
+# -- Inlining module flopenl(fast__3)
+# -- Inlining module ebufsmarb(fast)
+# -- Inlining module ebu(fast)
+# -- Inlining module hazard(fast)
+# -- Inlining module flopenl(fast__4)
+# -- Inlining module privmode(fast)
+# -- Inlining module floprc(fast)
+# -- Inlining module privdec(fast)
+# -- Inlining module csri(fast)
+# -- Inlining module csrsr(fast)
+# -- Inlining module flopenr(fast__10)
+# -- Inlining module flopenr(fast__11)
+# -- Inlining module csrm(fast)
+# -- Inlining module flopens(fast)
+# -- Inlining module csrs(fast)
+# -- Inlining module flopenr(fast__12)
+# -- Inlining module flopr(fast__2)
+# -- Inlining module csru(fast)
+# -- Inlining module csrc(fast)
+# -- Inlining module csr(fast)
+# -- Inlining module flopenrc(fast__7)
+# -- Inlining module flopenrc(fast__8)
+# -- Inlining module privpiperegs(fast)
+# -- Inlining module trap(fast)
+# -- Inlining module privileged(fast)
+# -- Inlining module flopenrc(fast__9)
+# -- Inlining module mul(fast)
+# -- Inlining module mdu(fast)
+# -- Inlining module flopenrc(fast__10)
+# -- Inlining module flopenrc(fast__11)
+# -- Inlining module fctrl(fast)
+# -- Inlining module fregfile(fast)
+# -- Inlining module flopenrc(fast__12)
+# -- Inlining module fhazard(fast)
+# -- Inlining module unpackinput(fast)
+# -- Inlining module unpack(fast)
+# -- Inlining module fmaexpadd(fast)
+# -- Inlining module fmamult(fast)
+# -- Inlining module fmasign(fast)
+# -- Inlining module fmaalign(fast)
+# -- Inlining module fmaadd(fast)
+# -- Inlining module lzc(fast)
+# -- Inlining module fmalza(fast)
+# -- Inlining module fma(fast)
+# -- Inlining module mux2(fast__14)
+# -- Inlining module mux2(fast__15)
+# -- Inlining module flopen(fast__3)
+# -- Inlining module flopen(fast__4)
+# -- Inlining module lzc(fast__1)
+# -- Inlining module fdivsqrtexpcalc(fast)
+# -- Inlining module flopen(fast__5)
+# -- Inlining module fdivsqrtpreproc(fast)
+# -- Inlining module fdivsqrtfsm(fast)
+# -- Inlining module flopen(fast__6)
+# -- Inlining module mux2(fast__16)
+# -- Inlining module flopen(fast__7)
+# -- Inlining module flopen(fast__8)
+# -- Inlining module fdivsqrtqsel4cmp(fast)
+# -- Inlining module fdivsqrtfgen4(fast)
+# -- Inlining module csa(fast)
+# -- Inlining module fdivsqrtuotfc4(fast)
+# -- Inlining module fdivsqrtstage4(fast)
+# -- Inlining module fdivsqrtiter(fast)
+# -- Inlining module aplusbeq0(fast)
+# -- Inlining module fdivsqrtpostproc(fast)
+# -- Inlining module fdivsqrt(fast)
+# -- Inlining module fcmp(fast)
+# -- Inlining module fsgninj(fast)
+# -- Inlining module fclassify(fast)
+# -- Inlining module lzc(fast__2)
+# -- Inlining module fcvt(fast)
+# -- Inlining module flopenrc(fast__13)
+# -- Inlining module flopenr(fast__13)
+# -- Inlining module flopenrc(fast__14)
+# -- Inlining module flopenrc(fast__15)
+# -- Inlining module flopenrc(fast__16)
+# -- Inlining module cvtshiftcalc(fast)
+# -- Inlining module fmashiftcalc(fast)
+# -- Inlining module divshiftcalc(fast)
+# -- Inlining module normshift(fast)
+# -- Inlining module mux2(fast__17)
+# -- Inlining module shiftcorrection(fast)
+# -- Inlining module roundsign(fast)
+# -- Inlining module round(fast)
+# -- Inlining module resultsign(fast)
+# -- Inlining module flags(fast)
+# -- Inlining module negateintres(fast)
+# -- Inlining module specialcase(fast)
+# -- Inlining module postprocess(fast)
+# -- Inlining module mux2(fast__18)
+# -- Inlining module fpu(fast)
+# -- Inlining module wallypipelinedcore(fast)
+# -- Inlining module ahbapbbridge(fast)
+# -- Inlining module flopenr(fast__14)
+# -- Inlining module ram1p1rwbe(fast__4)
+# -- Inlining module ram_ahb(fast)
+# -- Inlining module rom1p1r(fast)
+# -- Inlining module rom_ahb(fast)
+# -- Inlining module clint_apb(fast)
+# -- Inlining module flopr(fast__3)
+# -- Inlining module plic_apb(fast)
+# -- Inlining module flop(fast__1)
+# -- Inlining module gpio_apb(fast)
+# -- Inlining module uartPC16550D(fast)
+# -- Inlining module uart_apb(fast)
+# -- Inlining module flopenl(fast__5)
+# -- Inlining module uncore(fast)
+# -- Inlining module wallypipelinedsoc(fast)
+# -- Optimizing module testbench(fast)
+# -- Optimizing module DCacheFlushFSM(fast)
+# -- Inlining module mux2(fast__3)
+# -- Inlining module ram1p1rwbe(fast__2)
+# -- Inlining module ram1p1rwbe(fast__3)
+# -- Optimizing module cacheway(fast__1)
+# -- Optimizing module cacheway(fast__2)
+# -- Inlining module ram1p1rwbe(fast)
+# -- Inlining module ram1p1rwbe(fast__1)
+# -- Optimizing module cacheway(fast)
+# -- Optimizing module instrNameDecTB(fast)
+# -- Inlining module flopenr(fast__2)
+# -- Inlining module flopenr(fast__3)
+# -- Inlining module flopenr(fast__4)
+# -- Optimizing module tlbcamline(fast)
+# -- Optimizing module pmpadrdec(fast)
+# -- Optimizing module copyShadow(fast)
+# -- Optimizing module instrTrackerTB(fast)
+# -- Optimizing module flop(fast)
+# Optimized design name is testbenchopt
+# End time: 02:34:16 on Feb 03,2023, Elapsed time: 0:00:07
+# Errors: 0, Warnings: 0, Suppressed Errors: 4, Suppressed Warnings: 2
+# vsim -lib wkdir/work_rv32gc_arch32m testbenchopt -fatal 7 
+# Start time: 02:34:16 on Feb 03,2023
+# //  Questa Sim-64
+# //  Version 2022.4_2 linux_x86_64 Dec  9 2022
+# //
+# //  Copyright 1991-2022 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.testbench_sv_unit(fast)
+# Loading work.testbench(fast)
+# Loading work.instrTrackerTB(fast)
+# Loading work.instrNameDecTB(fast)
+# Loading work.DCacheFlushFSM(fast)
+# Loading work.flop(fast)
+# Loading work.tlbcamline(fast)
+# Loading work.pmpadrdec(fast)
+# Loading work.cacheway(fast)
+# Loading work.cacheway(fast__1)
+# Loading work.cacheway(fast__2)
+# Loading work.copyShadow(fast)
+# TEST is arch32m
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/div-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/div-01.S succeeded.  Brilliant!!!
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/divu-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/divu-01.S succeeded.  Brilliant!!!
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/rem-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/rem-01.S succeeded.  Brilliant!!!
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/remu-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/remu-01.S succeeded.  Brilliant!!!
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/mul-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/mul-01.S succeeded.  Brilliant!!!
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/mulh-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/mulh-01.S succeeded.  Brilliant!!!
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/mulhsu-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/mulhsu-01.S succeeded.  Brilliant!!!
+# Read memfile ../../tests/riscof/work/riscv-arch-test/rv32i_m/M/src/mulhu-01.S/ref/ref.elf.memfile
+# rv32i_m/M/src/mulhu-01.S succeeded.  Brilliant!!!
+# SUCCESS! All tests ran without failures.
+# ** Note: $stop    : ../testbench/testbench.sv(380)
+#    Time: 768335 ns  Iteration: 0  Instance: /testbench
+# Break at ../testbench/testbench.sv line 380
+# Stopped at ../testbench/testbench.sv line 380
+# End time: 02:34:31 on Feb 03,2023, Elapsed time: 0:00:15
+# Errors: 0, Warnings: 0
