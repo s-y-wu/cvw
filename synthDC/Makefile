@@ -21,6 +21,7 @@ export MAXCORES ?= 1
 export MAXOPT ?= 0
 export DRIVE ?= FLOP
 export USESRAM ?= 1
+export USETOPO ?= 0
 
 time := $(shell date +%F-%H-%M)
 hash := $(shell git rev-parse --short HEAD)
@@ -29,8 +30,6 @@ export SAIFPOWER ?= 0
 
 OLDCONFIGDIR ?= ${WALLY}/config
 export CONFIGDIR ?= $(OUTPUTDIR)/config
-
-
 
 default:
 	@echo "  Basic synthesis procedure for Wally:"
@@ -51,6 +50,18 @@ DIRS = $(DIRS32) $(DIRS64)
 
 configs: $(CONFIG)
 $(CONFIG):
+ifeq ($(USETOPO), 0))
+ifeq ($(TECH), tsmc28psyn))
+	@echo "Bad configuration: you cannot use physical synthesis without tsmc28psyn and usetopo (i.e., -topo)"
+	exit 1
+endif
+endif
+ifeq ($(USETOPO), 1))
+ifneq ($(TECH), tsmc28psyn))
+	@echo "Bad configuration: you cannot use usetopo (i.e., -topo) without tsmc28psyn"
+	exit 1
+endif
+endif
 	@echo $(CONFIG)
 	cp -r $(OLDCONFIGDIR)/shared/*.vh $(CONFIGDIR)
 	cp -r $(OLDCONFIGDIR)/$(CONFIG)/* $(CONFIGDIR)
@@ -84,6 +95,14 @@ endif
 endif
 	
 # adjust config if synthesizing with any modifications
+# This code is subtle with ifneq.  It successively turns off a larger
+# set of features in order of cycle time limiting.
+# When mod = orig, all features are ON
+# When mod = PMP0, the number of PMP entries is set to 0
+# when mod = noPriv, the privileged unit and PMP are disabled
+# when mod = noFPU, the FPU, privileged unit, and PMP are disabled
+# when mod = noMulDiv, the MDU, FPU, privileged unit, and PMP are disabled.
+
 ifneq ($(MOD), orig)
 	# PMP 0
 	sed -i 's/PMP_ENTRIES \(64\|16\|0\)/PMP_ENTRIES 0/' $(CONFIGDIR)/wally-config.vh
@@ -116,13 +135,17 @@ mkdirecs:
 	@mkdir -p $(OUTPUTDIR)/mapped
 	@mkdir -p $(OUTPUTDIR)/unmapped
 
-
 synth: mkdirecs configs rundc clean
 
 rundc:
+ifeq ($(USETOPO), 0)
 	dc_shell-xg-t -64bit -f scripts/$(NAME).tcl | tee $(OUTPUTDIR)/$(NAME).out
+else
 	
-	
+	dc_shell-xg-t -64bit -topographical_mode -f scripts/$(NAME).tcl | tee $(OUTPUTDIR)/$(NAME).out
+endif
+
+
 clean:
 	rm -rf $(OUTPUTDIR)/hdl
 	rm -rf $(OUTPUTDIR)/WORK
