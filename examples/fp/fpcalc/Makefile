@@ -16,7 +16,7 @@ PROGS = $(patsubst %.c,%,$(SRCS))
 all:	$(PROGS)
 
 %: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $< -o index.html $(LIBS)
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1
 
 clean: 
 	rm -f $(PROGS)
