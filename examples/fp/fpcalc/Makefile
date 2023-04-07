@@ -16,7 +16,7 @@ PROGS = $(patsubst %.c,%,$(SRCS))
 all:	$(PROGS)
 
 %: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o index.wasm $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1 -fPIC
 
 clean: 
 	rm -f $(PROGS)

@@ -10,14 +10,16 @@ IFLAGS   = -I$(RISCV)/riscv-isa-sim/softfloat
 LIBS   = $(RISCV)/riscv-isa-sim/build/libsoftfloat.a
 #IFLAGS = -I../../../addins/SoftFloat-3e/source/include/
 #LIBS   = ../../../addins/SoftFloat-3e/build/Linux-x86_64-GCC/softfloat.a
-SRCS   = $(wildcard *.c)
+
+UTILS = fpcalc_util.c
+SRCS   = $(filter-out $(UTILS),$(wildcard *.c))
 
 PROGS = $(patsubst %.c,%,$(SRCS))
 
 all:	$(PROGS)
 
 %: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o $@ $< $(LIBS)
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o $@ $< $(UTILS) $(LIBS)
 
 clean: 
 	rm -f $(PROGS)

@@ -21,10 +21,24 @@ class SoftFloatFunctions():
 
     @classmethod
     def printall(cls):
-        for name, info in SoftFloatFunctions.dictionary.items():
-            print(name)
-            print('  inputs:', info['inputs'])
-            print('  output:', info['output'])
+        for name, info in cls.dictionary.items():
+            if len(info['inputs']) > 3:
+                print(name, info['inputs'])
+            # print(name)
+            # print('  inputs:', info['inputs'])
+            # print('  output:', info['output'])
+    
+    @classmethod
+    def conversions(cls, exclusions=["i32", "i64", "extF80", "f128"]):
+        keyword = "_to_"
+        keys =  [func for func in cls.dictionary.keys() \
+                  if keyword in func and \
+                  not any(target in func for target in exclusions)]
+        keys.sort()
+        return keys
+
+from pprint import pprint
 
 if __name__ == '__main__':
-    SoftFloatFunctions.printall()
+    #SoftFloatFunctions.printall()
+    pprint(SoftFloatFunctions.conversions())

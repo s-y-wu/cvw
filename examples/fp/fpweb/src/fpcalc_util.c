@@ -1,33 +1,4 @@
-// softfloat_calc.c
-// David_Harris@hmc.edu 27 February 2022
-// 
-// Use SoftFloat as a calculator
-
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include "softfloat.h"
-#include "softfloat_types.h"
-
-typedef union hp {
-  uint16_t v;
-  float16_t h;
-} hp;
-
-typedef union sp {
-  uint32_t v;
-  float32_t ft;
-  float f;
-} sp;
-
-typedef union dp {
-  uint64_t v;
-  double d;
-} dp;
-
-
-int opSize = 0;
+#include "fpcalc_util.h"
 
 void long2binstr(unsigned long  val, char *str, int bits) {
   int i, shamt;
@@ -199,18 +170,4 @@ char parseRound(char *rnd) {
     printf("Rounding mode of %s is not known\n", rnd);
     exit(1);
   }
-}
-
-int main(int argc, char *argv[]) {
-  softfloatInit(); 
-  uint32_t xn = parseNum(argv[1]);
-  float32_t x;
-  x.v = xn;
-
-  float16_t y = f32_to_f16(x);
-
-  printf("Input:  ");
-  printF32(x);
-  printf("Output: ");
-  printF16(y);
 }
