@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Call WASM module from text box</title>
+  </head>
+  <body>
+    <label>Input 1:</label>
+    <input type="text" id="input1" value="0x0000">
+    <label>Input 2:</label>
+    <input type="text" id="input2" value="0x0000">
+    <button onclick="calculate()">Calculate</button>
+    <p id="output"></p>
+
+    <script>
+      // Define the calculate function
+      function calculate() {
+        // Get the input values from the text boxes
+        const input1 = parseInt(document.getElementById('input1').value, 16);
+        const input2 = parseInt(document.getElementById('input2').value, 16);
+
+        // Define the import object
+        const importObject = {
+        env: {
+            log: (str) => console.log(str),
+        },
+        };
+
+        const imports = {
+        env: {
+            // Define imports for the 'env' module
+            memory: new WebAssembly.Memory({ initial: 256, maximum: 256 }),
+            table: new WebAssembly.Table({ initial: 0, maximum: 0, element: 'anyfunc' })
+        }
+        };
+
+        // Load the WASM module
+        fetch('index.wasm', imports)
+          .then(response => response.arrayBuffer())
+          .then(bytes => WebAssembly.instantiate(bytes))
+          .then(obj => {
+            // Call the WASM function
+            const result = obj.instance.exports.main(input1, input2);
+
+            // Display the result in the output element
+            const output = document.getElementById('output');
+            output.textContent = `Result: ${result}`;
+          })
+          .catch(error => {
+            console.error('Failed to load WASM module:', error);
+          });
+      }
+    </script>
+  </body>
+</html>
