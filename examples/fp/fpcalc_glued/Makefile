@@ -1,7 +1,7 @@
 # Makefile
 
 CC     = emcc
-CFLAGS = -O3 -Wno-shift-overflow
+CFLAGS = -O3
 LIBS   = -lm
 LFLAGS = -L. 
 # IFLAGS   = -I$(RISCV)/riscv-isa-sim/softfloat
@@ -16,6 +16,6 @@ PROGS = $(patsubst %.c,%,$(SRCS))
 all:	$(PROGS)
 
 %: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o fpcalc.html $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1 -fPIC
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $< -o fpcalc.html $(LIBS) -s WASM=1 -s SIDE_MODULE=1 -fPIC
 clean: 
 	rm -f $(PROGS)
