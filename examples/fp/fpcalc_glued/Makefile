@@ -1,7 +1,7 @@
 # Makefile
 
 CC     = emcc
-CFLAGS = -O3 -Wno-format-overflow
+CFLAGS = -O3 -Wno-shift-overflow
 LIBS   = -lm
 LFLAGS = -L. 
 # IFLAGS   = -I$(RISCV)/riscv-isa-sim/softfloat
@@ -16,7 +16,7 @@ PROGS = $(patsubst %.c,%,$(SRCS))
 all:	$(PROGS)
 
 %: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o hello.html $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1 -fPIC --shell-file shell_minimal.html
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o fpcalc.html $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1 -fPIC --shell-file shell_minimal.html
 
 clean: 
 	rm -f $(PROGS)
