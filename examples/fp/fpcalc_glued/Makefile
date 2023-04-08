@@ -16,7 +16,6 @@ PROGS = $(patsubst %.c,%,$(SRCS))
 all:	$(PROGS)
 
 %: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o fpcalc.html $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1 -fPIC --shell-file shell_minimal.html
-
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) -o fpcalc.html $< $(LIBS) -s WASM=1 -s SIDE_MODULE=1 -fPIC
 clean: 
 	rm -f $(PROGS)
